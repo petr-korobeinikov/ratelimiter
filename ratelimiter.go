@@ -6,6 +6,7 @@ import (
 )
 
 func (r *ratelimiter) Execute(ctx context.Context) {
+	//todo execute first task immediately
 	for _, task := range r.tasks {
 		select {
 		case <-ctx.Done():
