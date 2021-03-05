@@ -29,7 +29,7 @@ func New(opts ...Option) *ratelimiter {
 	return r
 }
 
-func WithDuration(d time.Duration) Option {
+func WithInterval(d time.Duration) Option {
 	return func(r *ratelimiter) {
 		r.timeCh = time.Tick(d)
 	}

@@ -14,7 +14,7 @@ func TestRatelimiter_Execute(t *testing.T) {
 		ctx := context.Background()
 
 		sut := New(
-			WithDuration(10*time.Millisecond),
+			WithInterval(10*time.Millisecond),
 			WithTasks(func() { called1 = true }, func() { called2 = true }, func() { called3 = true }),
 		)
 		sut.Execute(ctx)
@@ -28,7 +28,7 @@ func TestRatelimiter_Execute(t *testing.T) {
 		ctx := context.Background()
 
 		sut := New(
-			WithDuration(50 * time.Millisecond),
+			WithInterval(50 * time.Millisecond),
 		)
 		sut.Execute(ctx)
 	})
@@ -47,7 +47,7 @@ func TestRatelimiter_Execute(t *testing.T) {
 		var called1, called2 bool
 
 		sut := New(
-			WithDuration(35*time.Millisecond),
+			WithInterval(35*time.Millisecond),
 			WithTasks(func() { called1 = true }, func() { called2 = true }),
 		)
 		sut.Execute(ctx)
