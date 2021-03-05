@@ -10,8 +10,7 @@ func (r *ratelimiter) Execute(ctx context.Context) {
 		select {
 		case <-ctx.Done():
 			return
-		case <-r.timeCh:
-			<-r.timeCh
+		case <-r.ticker.C:
 			task()
 		}
 	}
@@ -19,7 +18,7 @@ func (r *ratelimiter) Execute(ctx context.Context) {
 
 func New(opts ...Option) *ratelimiter {
 	r := &ratelimiter{
-		timeCh: time.Tick(1 * time.Millisecond),
+		ticker: time.NewTicker(1 * time.Millisecond),
 	}
 
 	for _, opt := range opts {
@@ -31,7 +30,7 @@ func New(opts ...Option) *ratelimiter {
 
 func WithInterval(d time.Duration) Option {
 	return func(r *ratelimiter) {
-		r.timeCh = time.Tick(d)
+		r.ticker = time.NewTicker(d)
 	}
 }
 
@@ -45,6 +44,6 @@ type Option func(*ratelimiter)
 type Task func()
 
 type ratelimiter struct {
-	timeCh <-chan time.Time
+	ticker *time.Ticker
 	tasks  []Task
 }
