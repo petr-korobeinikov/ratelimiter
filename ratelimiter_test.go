@@ -40,6 +40,16 @@ func TestRatelimiter_Execute(t *testing.T) {
 		sut.Execute(ctx)
 	})
 
+	t.Run(`only one task supplied`, func(t *testing.T) {
+		var called bool
+		ctx := context.Background()
+
+		sut := New(WithTasks(func() { called = true }))
+		sut.Execute(ctx)
+
+		assert.True(t, called)
+	})
+
 	t.Run(`timeout`, func(t *testing.T) {
 		ctx, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 		defer cancel()
@@ -47,7 +57,7 @@ func TestRatelimiter_Execute(t *testing.T) {
 		var called1, called2 bool
 
 		sut := New(
-			WithInterval(35*time.Millisecond),
+			WithInterval(75*time.Millisecond),
 			WithTasks(func() { called1 = true }, func() { called2 = true }),
 		)
 		sut.Execute(ctx)

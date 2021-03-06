@@ -6,8 +6,15 @@ import (
 )
 
 func (r *ratelimiter) Execute(ctx context.Context) {
-	//todo execute first task immediately
-	for _, task := range r.tasks {
+	if len(r.tasks) == 0 {
+		return
+	}
+
+	first, tail := r.tasks[0], r.tasks[1:]
+
+	first()
+
+	for _, task := range tail {
 		select {
 		case <-ctx.Done():
 			return
