@@ -1,5 +1,7 @@
 # ratelimiter
 
+> The dumbest rate limiter I ever wrote to pass Golang interview.
+
 ## Usage
 
 ```go
